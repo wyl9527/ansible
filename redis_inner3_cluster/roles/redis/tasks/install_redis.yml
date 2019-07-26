@@ -8,8 +8,6 @@
     state: present
   tags:
     - add_redis_user
-    - install_redis_cluster
-
 
 
 - name: mkdir_redis_dir
@@ -24,7 +22,6 @@
     - "{{ redis_dir }}"
   tags:
     - mkdir_redis_dir
-    - install_redis_cluster
 
 
 
@@ -40,7 +37,6 @@
     - "{{ redis_bin }}"
   tags:
     - copy_redis_bin
-    - install_redis_cluster
 
 
 
@@ -54,19 +50,17 @@
     - "{{ redis_list }}"
   tags:
     - copy_redis_conf
-    - install_redis_cluster
 
 
 
-- name: redis | service
+- name: add_redis_systemd
   template:
     src: redis.service.j2
     dest: /etc/systemd/system/redis-{{ item.port }}.service
   with_items:
     - "{{ redis_list }}"
   tags:
-    - install_redis
-    - install_redis_service
+    - add_redis_systemd
 
 
 
@@ -80,7 +74,6 @@
     - "{{ redis_list }}"
   tags:
     - start_redis_service
-    - install_redis_service
 
 
 
@@ -89,7 +82,6 @@
   when: master is defined
   tags:
     - gem_install_redis
-    - install_redis_service
 
 
 - name: copy_script_file
@@ -102,7 +94,8 @@
   when: master is defined
   tags:
     - copy_script_file
-    - install_redis_service
+
+
 
 - name: install_expect
   yum: 
@@ -111,14 +104,14 @@
   when: master is defined
   tags: 
     - install_expect
-    - install_redis_service 
+
+
 
 - name: init_redis_cluster
   shell: /tmp/add_cluster.sh
   when: master is defined
   tags:
     - init_redis_cluster
-    - install_redis_service
 
 
 
