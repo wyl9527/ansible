@@ -6,7 +6,6 @@
   when: master is defined
   tags:
     - unarchive_ruby
-    - install_ruby
 
 
 
@@ -17,7 +16,6 @@
   when: master is defined
   tags:
     - remove_old_ruby
-    - install_ruby
 
 
 
@@ -29,7 +27,6 @@
   when: master is defined
   tags:
     - link_ruby
-    - install_ruby
 
 
 - name: link_gem
@@ -40,5 +37,4 @@
   when: master is defined
   tags:
     - link_gem
-    - install_ruby
 
