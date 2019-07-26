@@ -1,0 +1,8 @@
+[redis]
+wyl01   ansible_ssh_host=192.168.190.130   ansible_ssh_pass=123456  master=true
+wyl02   ansible_ssh_host=192.168.190.131   ansible_ssh_pass=123456 
+wyl03   ansible_ssh_host=192.168.190.132   ansible_ssh_pass=123456
+
+[redis:vars]
+mport=7000
+sport=7001

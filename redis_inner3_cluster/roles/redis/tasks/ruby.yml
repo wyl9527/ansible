@@ -1,0 +1,44 @@
+---
+- name: unarchive_ruby
+  unarchive:
+    src: rvm.tar.gz
+    dest: /usr/local/
+  when: master is defined
+  tags:
+    - unarchive_ruby
+    - install_ruby
+
+
+
+- name: remove_old_ruby
+  yum:
+    name: ruby
+    state: absent
+  when: master is defined
+  tags:
+    - remove_old_ruby
+    - install_ruby
+
+
+
+- name: link_ruby
+  file:
+    src: /usr/local/rvm/archives/rvm-1.29.8/rubies/ruby-2.4.6/bin/ruby
+    dest: /usr/bin/ruby
+    state: link
+  when: master is defined
+  tags:
+    - link_ruby
+    - install_ruby
+
+
+- name: link_gem
+  file:
+    src: /usr/local/rvm/archives/rvm-1.29.8/rubies/ruby-2.4.6/bin/gem
+    dest: /usr/bin/gem
+    state: link
+  when: master is defined
+  tags:
+    - link_gem
+    - install_ruby
+

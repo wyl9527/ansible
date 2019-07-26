@@ -1,0 +1,20 @@
+[Unit]
+Description=Redis persistent key-value database
+After=network.target
+
+[Service]
+ExecStart=/data/redis-{{ item.port }}/bin/redis-server /data/redis-{{ item.port }}/conf/redis.conf --supervised systemd
+ExecStop=/data/redis-{{ item.port }}/bin/redis-cli -h {{ ansible_ssh_host }} -p {{ item.port }} {% if item.password is defined %} -a {{ item.password }} {% endif %} shutdown
+Restart=always
+RestartSec=10
+Type=notify
+User=redis
+Group=redis
+RuntimeDirectory=redis-{{ item.port }}
+RuntimeDirectoryMode=0755
+LimitNOFILE=10240
+
+[Install]
+WantedBy=multi-user.target
+
+
