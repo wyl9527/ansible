@@ -1,0 +1,6 @@
+---
+mysql_repo:
+  - mysql-community.repo
+  - mysql-community-source.repo
+
+

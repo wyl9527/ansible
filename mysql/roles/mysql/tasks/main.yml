@@ -1,0 +1,17 @@
+- name: copy_mysql_repo
+  copy:
+    src: "{{ item }}"
+    dest: /etc/yum.repos.d/
+    mode: 0755
+  with_items:
+    - "{{ mysql_repo }}"
+  tags:
+    - copy_mysql_repo
+
+
+- name: install_mysql
+  yum:
+    name: mysql-community-server
+    state: latest
+  tags:
+    - install_mysql 
