@@ -1,0 +1,11 @@
+---
+mysql_version: mysql-5.7.20-linux-glibc2.12-x86_64
+mysql_install_path: /usr/local
+mysql_link: mysql
+mysql_sock: /tmp/mysql.sock
+mysql_port: 3306
+mysql_root_passwd: "123456"
+master_ip: 192.168.52.129
+slave_ip: 192.168.52.130
+repl_user: repl
+repl_passwd: "123456"

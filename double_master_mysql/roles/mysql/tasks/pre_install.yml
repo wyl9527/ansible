@@ -1,0 +1,6 @@
+- name: install_MySQL-python
+  yum:
+    name: MySQL-python
+    state: latest
+  tags:
+    - install_MySQL-python

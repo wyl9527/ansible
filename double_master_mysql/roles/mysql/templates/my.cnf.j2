@@ -1,0 +1,42 @@
+[mysqld]
+datadir={{mysql_install_path}}/{{mysql_link}}/data
+socket={{mysql_sock}}
+user=mysql
+symbolic-links=0
+# Disabling symbolic-links is recommended to prevent assorted security risks
+# character set
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+character-set-client-handshake=FALSE
+port={{mysql_port}}
+
+{% if master is defined %}
+server-id=1                              
+{% else %}
+server-id=2
+{% endif %}
+
+gtid_mode=on                             #开启gtid模式
+enforce_gtid_consistency=on
+log-bin=mysql-bin
+
+# slow query
+slow_query_log=on
+slow_query_log_file={{mysql_install_path}}/{{mysql_link}}/log/slow-query.log
+
+
+# Adjust as your needed
+max_connections=512
+back_log=256
+connect_timeout=10
+key_buffer_size=16777216
+innodb_buffer_pool_size=536870912
+tmp_table_size=536870912
+thread_cache_size=100
+long_query_time=2
+max_allowed_packet=64M
+
+log-error={{mysql_install_path}}/{{mysql_link}}/log/mysqld.log
+#启动mysql后的进程文件所在的位置
+pid-file={{mysql_install_path}}/{{mysql_link}}/data/mysql.pid
+# !includedir /etc/my.cnf.d

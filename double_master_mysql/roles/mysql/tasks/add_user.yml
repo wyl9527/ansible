@@ -1,0 +1,9 @@
+---
+- name: add_mysql_user
+  user:
+    name: mysql
+    create_home: no
+    shell: /sbin/nologin
+  tags:
+    - add_mysql_user
+

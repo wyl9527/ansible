@@ -1,0 +1,4 @@
+- include: pre_install.yml
+- include: add_user.yml
+- include: install_mysql.yml
+- include: change_slave_to_master.yml

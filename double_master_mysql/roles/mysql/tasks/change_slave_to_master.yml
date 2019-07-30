@@ -1,0 +1,76 @@
+---
+- name: create_user
+  mysql_user: 
+    login_host: 127.0.0.1
+    login_port: "{{ mysql_port }}"
+    login_user: root 
+    login_password: "{{ mysql_root_passwd }}"
+    name: "{{ repl_user }}"
+    password: "{{ repl_passwd }}"
+    priv: "*.*:ALL"
+    state: present 
+    host: "%"
+  when: master is defined
+  tags:
+    - create_user
+
+
+
+- name: change_slave_to_master1
+  mysql_replication:
+    login_unix_socket: "{{ mysql_sock }}"
+    login_host: 127.0.0.1
+    login_port: "{{ mysql_port }}"
+    login_user: root     
+    login_password: "{{ mysql_root_passwd }}"
+    master_host: "{{ master_ip }} " 
+    master_user: "{{ repl_user }}" 
+    master_password: "{{ repl_passwd }}"
+    master_port: "{{ mysql_port }}"
+    master_auto_position: "1"
+    mode: changemaster
+  when: slave is defined
+  tags:
+    - change_slave_to_master1 
+
+
+- name: start_slave1
+  mysql_replication: 
+    login_unix_socket: "{{ mysql_sock }}"
+    login_user: root 
+    login_host: 127.0.0.1
+    login_port: "{{ mysql_port }}"
+    login_password: "{{ mysql_root_passwd }}"
+    mode: startslave
+  tags: 
+    - start_slave1
+
+
+- name: change_slave_to_master2
+  mysql_replication:
+    login_unix_socket: "{{ mysql_sock }}"
+    login_host: 127.0.0.1
+    login_port: "{{ mysql_port }}"
+    login_user: root
+    login_password: "{{ mysql_root_passwd }}"
+    master_host: "{{ slave_ip }} "
+    master_user: "{{ repl_user }}"
+    master_password: "{{ repl_passwd }}"
+    master_port: "{{ mysql_port }}"
+    master_auto_position: "1"
+    mode: changemaster
+  when: master is defined
+  tags:
+    - change_slave_to_master2
+
+
+- name: start_slave2
+  mysql_replication:
+    login_unix_socket: "{{ mysql_sock }}"
+    login_user: root
+    login_host: 127.0.0.1
+    login_port: "{{ mysql_port }}"
+    login_password: "{{ mysql_root_passwd }}"
+    mode: startslave
+  tags:
+    - start_slave2

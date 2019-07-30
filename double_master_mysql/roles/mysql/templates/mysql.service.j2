@@ -1,0 +1,13 @@
+[Unit]
+Description=MySQL
+SourcePath=/etc/init.d/mysql-{{mysql_port}}.server
+Before=shutdown.target 
+
+[Service]
+User=mysql 
+Type=forking
+ExecStart=/etc/init.d/mysql-{{mysql_port}}.server start
+ExecStop=/etc/init.d/mysql-{{mysql_port}}.server stop
+
+[Install]
+WantedBy=multi-user.target
