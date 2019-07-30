@@ -1,0 +1,2 @@
+[mysql]
+wyl02   ansible_ssh_host=192.168.190.131   ansible_ssh_pass=123456  version=7

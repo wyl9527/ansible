@@ -1,0 +1,124 @@
+---
+- name: add_redis_user
+  user:
+    comment: "add redis user"
+    name: redis
+    create_home: no
+    shell: /sbin/nologin
+    state: present
+  tags:
+    - add_redis_user
+
+
+- name: mkdir_redis_dir
+  file:
+    path: /data/redis-{{item.0.port}}/{{ item.1 }}
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0755
+  with_nested:
+    - "{{ redis_list }}"
+    - "{{ redis_dir }}"
+  tags:
+    - mkdir_redis_dir
+
+
+
+- name: copy_redis_bin
+  copy:
+    src: "{{ item.1 }}"
+    dest: /data/redis-{{ item.0.port }}/bin
+    owner: redis
+    group: redis
+    mode: 0755
+  with_nested:
+    - "{{ redis_list }}"
+    - "{{ redis_bin }}"
+  tags:
+    - copy_redis_bin
+
+
+
+- name: copy_redis_conf
+  template:
+    src: redis.conf.j2
+    dest: /data/redis-{{ item.port }}/conf/redis.conf
+    owner: redis
+    group: redis
+  with_items:
+    - "{{ redis_list }}"
+  tags:
+    - copy_redis_conf
+
+
+
+- name: add_redis_systemd
+  template:
+    src: redis.service.j2
+    dest: /etc/systemd/system/redis-{{ item.port }}.service
+  with_items:
+    - "{{ redis_list }}"
+  tags:
+    - add_redis_systemd
+
+
+
+- name: start_redis_service
+  systemd:
+    name: redis-{{ item.port }}
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+  with_items:
+    - "{{ redis_list }}"
+  tags:
+    - start_redis_service
+
+
+
+- name: gem_install_redis
+  shell: gem install redis
+  when: master is defined
+  tags:
+    - gem_install_redis
+
+
+- name: copy_script_file
+  template:
+    src: add_cluster.sh
+    dest: /tmp
+    owner: redis
+    group: redis
+    mode: '0755'
+  when: master is defined
+  tags:
+    - copy_script_file
+
+
+
+- name: install_expect
+  yum: 
+    name: expect
+    state: latest
+  when: master is defined
+  tags: 
+    - install_expect
+
+
+
+- name: init_redis_cluster
+  shell: /tmp/add_cluster.sh
+  when: master is defined
+  tags:
+    - init_redis_cluster
+
+
+
+#- name: remove|dir
+#  file:
+#    path: /data
+#    state: absent
+#  tags:
+#    - remove_dir
+#
