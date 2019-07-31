@@ -3,5 +3,4 @@
 链接：https://pan.baidu.com/s/165v5mRPKbOEhGcuQx8NaXw 
 提取码：nabm 
 
-下载mysql的安装包到file目录下123
-
+下载mysql的安装包到file目录下
