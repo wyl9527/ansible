@@ -74,3 +74,24 @@
     mode: startslave
   tags:
     - start_slave2
+
+
+
+- name: get_slave_info
+  mysql_replication:
+    login_host: 127.0.0.1
+    login_user: root
+    login_port: 3306
+    login_password: "123456"
+    mode: getslave
+  register: info
+  tags:
+    - get_slave_info
+
+
+- name: dispaly_slave
+  debug:
+    msg: "Slave_SQL_Running={{ info.Slave_IO_Running }}       Slave_SQL_Running={{ info.Slave_SQL_Running }}"
+  tags:
+    - dispaly_slave
+
